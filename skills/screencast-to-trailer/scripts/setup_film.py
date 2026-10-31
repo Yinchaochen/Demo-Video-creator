@@ -60,7 +60,9 @@ def main():
     (root / "film/vendor").mkdir(exist_ok=True)
     (root / "package.json").write_text(json.dumps({"name": "trailer", "private": True}), encoding="utf-8")
     npm = shutil.which("npm")
-    subprocess.run([npm, "install", "--no-audit", "--no-fund", "hyperframes", "gsap", "@fontsource/lora", "@fontsource/instrument-sans"], cwd=root, check=True)
+    # The versions the template was tested on. Bump them on purpose and render a test film when you do.
+    subprocess.run([npm, "install", "--no-audit", "--no-fund", "--save-exact", "hyperframes@0.8.223", "gsap@3.15.0", "@fontsource/lora@5.3.0",
+                    "@fontsource/instrument-sans@5.3.0"], cwd=root, check=True)
     nm = root / "node_modules"
     shutil.copy(nm / "gsap/dist/gsap.min.js", root / "film/vendor/gsap.min.js")
     for dst, src in FONTS.items():
