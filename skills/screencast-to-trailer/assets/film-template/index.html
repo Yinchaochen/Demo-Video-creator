@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Product trailer</title>
+    <script src="vendor/gsap.min.js"></script>
+    <style>
+      /* Point these at the brand's fonts. Stage the files in assets/fonts (setup_film.py fetches two OFL defaults). */
+      @font-face { font-family: "Head"; src: url("assets/fonts/head-500.woff2") format("woff2"); font-weight: 500; font-style: normal; }
+      @font-face { font-family: "Head"; src: url("assets/fonts/head-500-italic.woff2") format("woff2"); font-weight: 500; font-style: italic; }
+      @font-face { font-family: "Body"; src: url("assets/fonts/body-400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Body"; src: url("assets/fonts/body-500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Body"; src: url("assets/fonts/body-600.woff2") format("woff2"); font-weight: 600; }
+      :root { --ink: #1f1d1a; --ink2: #6e6a62; --line: #e7e4de; --brand: #ff5a29; --night: #070706; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--night); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--night); font-family: "Head", Georgia, serif; color: #fff; }
+      #cold { position: absolute; inset: 0; }
+      .lyr { position: absolute; inset: 0; }
+      i { font-style: italic; color: var(--brand); }
+
+      /* cold open */
+      #quiet { position: absolute; left: 0; right: 0; top: 408px; text-align: center; font-weight: 500; font-size: 62px; line-height: 1.42; }
+      #quiet div { opacity: 0; }
+      .slam { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-weight: 500; font-size: 126px; letter-spacing: -.02em; line-height: 1.08; opacity: 0; text-shadow: 0 0 34px rgba(0,0,0,.95), 0 0 90px rgba(0,0,0,.9); }
+      .slam.long { font-size: 104px; }
+      .payoff { position: absolute; left: 0; right: 0; top: 540px; text-align: center; font-size: 62px; font-weight: 500; opacity: 0; }
+      #fl { position: absolute; inset: 0; background: #fff; opacity: 0; mix-blend-mode: screen; }
+
+      /* the white world */
+      #flood { position: absolute; inset: 0; background: #fff; color: var(--ink); overflow: hidden; display: none; }
+      #win { position: absolute; overflow: hidden; background: #fff; }
+      #pg { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+      #pg video { position: absolute; left: 0; top: 0; display: block; }
+      #typed { position: absolute; font-family: "Body", sans-serif; color: #2b2925; white-space: pre; visibility: hidden; }
+      #caret { display: inline-block; width: 2px; height: 1.1em; background: #2b2925; vertical-align: -.2em; margin-left: 1px; }
+      #ripple { position: absolute; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; border: 4px solid var(--brand); opacity: 0; }
+      .ring { position: absolute; border-radius: 16px; border: 4px solid var(--brand); opacity: 0; }
+      .ring.dim { box-shadow: 0 0 0 3000px rgba(255,255,255,.62); }
+
+      #lock { position: absolute; left: 626px; top: 402px; width: 680px; height: 170px; transform-origin: 0 0; }
+      #lock svg { position: absolute; left: 0; top: 0; overflow: visible; }
+      #word { position: absolute; left: 196px; top: 4px; font-family: "Body", sans-serif; font-weight: 600; font-size: 150px; line-height: 160px; letter-spacing: -.025em; color: var(--ink); white-space: nowrap; }
+      #tag { position: absolute; left: 0; right: 0; top: 612px; text-align: center; font-weight: 500; font-size: 52px; color: var(--ink); opacity: 0; }
+      #tag .w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; }
+      #tag .w > span { display: inline-block; transform: translateY(115%); }
+
+      .hl { position: absolute; font-weight: 500; letter-spacing: -.015em; color: var(--ink); white-space: nowrap; opacity: 0; }
+      .hl .w { display: inline-block; overflow: hidden; vertical-align: top; padding: .06em .04em .14em 0; margin-bottom: -.14em; }
+      .hl .w > span { display: inline-block; transform: translateY(115%); }
+      .hl.top { left: 0; right: 0; top: 44px; text-align: center; font-size: 62px; }
+      .hl.left { left: 118px; top: 392px; font-size: 92px; line-height: 1.14; white-space: normal; width: 760px; }
+      .u { position: relative; display: inline-block; }
+      .st { position: absolute; left: 0; right: .06em; bottom: -.02em; height: 4px; border-radius: 2px; background: repeating-linear-gradient(90deg, var(--brand) 0 16px, transparent 16px 26px); clip-path: inset(0 100% 0 0); }
+
+      #pill { position: absolute; left: 1612px; top: 56px; height: 62px; width: 208px; border-radius: 31px; background: #fff; border: 1.5px solid var(--line); box-shadow: 0 8px 26px rgba(30,25,15,.08); display: flex; align-items: center; justify-content: center; gap: 12px; font-family: "Body", sans-serif; opacity: 0; transform-origin: 100% 50%; }
+      #pill b { font-weight: 600; font-size: 30px; color: var(--ink); font-variant-numeric: tabular-nums; }
+      #pill span { font-size: 15px; font-weight: 500; color: var(--ink2); letter-spacing: .02em; }
+      #pill em { width: 11px; height: 11px; border-radius: 50%; background: var(--brand); }
+      .fn { position: absolute; left: 0; right: 0; top: 126px; text-align: center; font-family: "Body", sans-serif; font-size: 18px; font-weight: 500; color: var(--ink2); opacity: 0; }
+
+      .still, #stmtbg { position: absolute; inset: 0; background: #fff; display: none; }
+      .crop { position: absolute; overflow: hidden; background: #fff; }
+      .crop img { position: absolute; left: 0; top: 0; transform-origin: 0 0; display: block; }
+      .card { border-radius: 22px; box-shadow: 0 34px 90px rgba(30,25,15,.16), 0 0 0 1.5px var(--line); }
+      .mark { position: absolute; background: #ffc9b5; mix-blend-mode: multiply; transform-origin: 0 50%; border-radius: 4px; }
+      .tag-ring { position: absolute; border: 3.5px solid var(--brand); border-radius: 14px; opacity: 0; }
+      .sub { position: absolute; left: 118px; top: 640px; width: 640px; font-family: "Body", sans-serif; font-size: 30px; line-height: 1.34; color: var(--ink2); opacity: 0; }
+      .stmt { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; font-size: 120px; font-weight: 500; letter-spacing: -.02em; color: var(--ink); opacity: 0; }
+
+      /* climax on black */
+      #cx { position: absolute; inset: 0; background: var(--night); color: #fff; display: none; }
+      .big { position: absolute; left: 0; right: 0; top: 356px; text-align: center; font-weight: 500; font-size: 230px; letter-spacing: -.03em; line-height: 1; opacity: 0; }
+      .bigsub { position: absolute; left: 0; right: 0; top: 628px; text-align: center; font-family: "Body", sans-serif; font-size: 34px; color: #b9b5ac; opacity: 0; }
+      .sl { position: absolute; inset: 0; display: none; }
+      .say { position: absolute; left: 110px; top: 50%; transform: translateY(-50%); width: 760px; font-size: 104px; font-weight: 500; line-height: 1.1; letter-spacing: -.02em; }
+      .cxfn { position: absolute; left: 112px; top: 1000px; font-family: "Body", sans-serif; font-size: 18px; color: #8c887f; opacity: 0; }
+      .rap { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; visibility: hidden; object-fit: cover; object-position: 50% 0; transform-origin: 50% 40%; }
+
+      /* end card */
+      #end { position: absolute; inset: 0; background: var(--night); display: none; }
+      #elogo { position: absolute; left: 632px; top: 339px; }
+      #elogo svg { overflow: visible; display: block; }
+      #eword { position: absolute; left: 822px; top: 346px; font-family: "Body", sans-serif; font-weight: 600; font-size: 150px; line-height: 160px; letter-spacing: -.025em; color: #fff; opacity: 0; white-space: nowrap; }
+      #etag { position: absolute; left: 0; right: 0; top: 548px; text-align: center; font-size: 52px; font-weight: 500; opacity: 0; }
+      #cta { position: absolute; left: 744px; top: 662px; width: 432px; height: 92px; border-radius: 46px; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; font-family: "Body", sans-serif; font-weight: 600; font-size: 36px; opacity: 0; overflow: hidden; }
+      #cta u { position: absolute; left: -120px; top: -20px; width: 70px; height: 140px; background: rgba(255,255,255,.42); transform: skewX(-20deg); filter: blur(6px); }
+      #eurl { position: absolute; left: 0; right: 0; top: 782px; text-align: center; font-family: "Body", sans-serif; font-size: 34px; font-weight: 500; color: #fff; opacity: 0; }
+      #enote { position: absolute; left: 0; right: 0; top: 836px; text-align: center; font-family: "Body", sans-serif; font-size: 24px; color: #9d998f; opacity: 0; }
+      #credit { position: absolute; left: 0; right: 0; top: 1022px; text-align: center; font-family: "Body", sans-serif; font-size: 17px; color: #77736a; opacity: 0; }
+      #fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <!-- data-duration must match config.js (setup_film.py keeps them in step) -->
+    <div id="root" class="clip" data-composition-id="main" data-start="0" data-duration="110" data-fps="60" data-width="1920" data-height="1080">
+      <canvas id="cold" width="1920" height="1080"></canvas>
+      <div class="lyr" id="a1"><div id="quiet"></div><div id="fl"></div></div>
+      <div id="flood">
+        <div id="win"><div id="pg">
+          <video id="master" class="clip" src="assets/master.mp4" muted playsinline data-start="30" data-duration="30" data-media-start="0"></video>
+          <div id="typed"><span id="ty"></span><span id="caret"></span></div>
+          <div id="ripple"></div>
+        </div></div>
+        <div id="stmtbg"></div>
+        <div id="lock"></div>
+        <div id="tag"></div>
+        <div id="pill"><em></em><b id="clk">0:00</b><span>real time</span></div>
+      </div>
+      <div id="cx"></div>
+      <div id="end">
+        <svg id="ethreadsvg" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" style="position:absolute;inset:0;overflow:visible"><path id="ethread" d="M0 0" stroke="var(--brand)" stroke-width="3.2" stroke-linecap="round" /></svg>
+        <div id="elogo"></div>
+        <div id="eword"></div>
+        <div id="etag"></div>
+        <div id="cta"><span id="ctatxt"></span><u id="shine"></u></div>
+        <div id="eurl"></div>
+        <div id="enote"></div>
+        <div id="credit"></div>
+      </div>
+      <div id="fade"></div>
+    </div>
+    <script src="config.js"></script>
+    <script src="concept.js"></script>
+    <script src="film.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = window.__filmTimeline;
+    </script>
+  </body>
+</html>

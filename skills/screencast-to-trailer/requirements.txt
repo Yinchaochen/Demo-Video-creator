@@ -1,0 +1,8 @@
+numpy
+scipy
+opencv-python-headless
+pillow
+matplotlib
+librosa
+soundfile
+pyloudnorm

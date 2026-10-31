@@ -1,0 +1,17 @@
+{
+  "name": "screencast-to-trailer",
+  "owner": { "name": "Yinchaochen" },
+  "metadata": {
+    "description": "Turn a screen recording of your software into a finished product trailer",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "screencast-to-trailer",
+      "description": "Turn a raw screen recording and a short prompt into a product trailer with an openly licensed score, sound design and a privacy pass",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/screencast-to-trailer"]
+    }
+  ]
+}
